@@ -1,0 +1,28 @@
+spring:
+  application:
+  name: agencia
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://${PROD_DB_HOST}:${PROD_DB_PORT}/${PROD_DB_NAME}
+    username: ${PROD_DB_USERNAME}
+    password: ${PROD_DB_PASSWORD}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI}
+          jwk-set-uri: ${JWK_SET_URI}
+cors:
+  allowed:
+    origins: ${CORS_ORIGINS}
+server:
+  port: ${PORT_APACHE}
+#server:
+#  port: ${PORT}
+#  port: 8081
+
