@@ -1,10 +1,13 @@
 package com.agencia.domain;
 
 import com.agencia.domain.enums.Status;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -27,6 +30,17 @@ public class Vaga {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    protected Date dataFim;
+
+    @Column(nullable = false)
+    protected boolean exclusaoLogica = false;
+
+    @JsonGetter
+    public boolean isAtivo() {
+        return getDataFim() == null || getDataFim().compareTo(new Date()) > 0;
+    }
 
 //    @ManyToOne
 //    @JoinColumn(name = "administrador_id")

@@ -40,4 +40,16 @@ public class VagaController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<VagaDTO> update(@PathVariable Long id, @Valid @RequestBody VagaDTO objDTO) {
+        Vaga obj = vagaService.update(id, objDTO);
+        return ResponseEntity.ok().body(new VagaDTO(obj));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<VagaDTO> delete(@PathVariable Long id) {
+        vagaService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

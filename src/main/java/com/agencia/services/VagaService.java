@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,7 @@ public class VagaService {
         vaga.setRequisitos(obj.getRequisitos());
         vaga.setDataCriacao(obj.getDataCriacao());
         vaga.setDataAtualizacao(obj.getDataAtualizacao());
+        vaga.setDataFim(obj.getDataFim());
         vaga.setStatus(obj.getStatus());
         return vaga;
     }
@@ -63,8 +65,17 @@ public class VagaService {
         existeVaga.setDescricao(objDTO.getDescricao());
         existeVaga.setRequisitos(objDTO.getRequisitos());
         existeVaga.setDataCriacao(objDTO.getDataCriacao());
+        existeVaga.setDataFim(objDTO.getDataFim());
         existeVaga.setDataAtualizacao(objDTO.getDataAtualizacao());
 
         return vagaRepository.save(existeVaga);
+    }
+
+    public void delete(Long id) {
+        Vaga obj = findById(id);
+
+        obj.setDataFim(new Date());
+        obj.setExclusaoLogica(true);
+        vagaRepository.save(obj);
     }
 }

@@ -2,12 +2,14 @@ package com.agencia.domain.dto;
 
 import com.agencia.domain.Vaga;
 import com.agencia.domain.enums.Status;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.awt.font.TextHitInfo;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,17 +20,20 @@ public class VagaDTO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
-    private String titulo;
-    private String descricao;
-    private String requisitos;
+    protected String titulo;
+    protected String descricao;
+    protected String requisitos;
 
-    private LocalDateTime dataCriacao;
-    private LocalDateTime dataAtualizacao;
+    protected LocalDateTime dataCriacao;
+    protected LocalDateTime dataAtualizacao;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    protected Date dataFim;
+    protected boolean exclusaoLogica = false;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    protected Status status;
 
     public VagaDTO(Vaga vaga){
         this.id = vaga.getId();
@@ -37,6 +42,9 @@ public class VagaDTO implements Serializable {
         this.requisitos = vaga.getRequisitos();
         this.dataCriacao = vaga.getDataCriacao();
         this.dataAtualizacao = vaga.getDataAtualizacao();
+        this.dataFim = vaga.getDataFim();
         this.status = vaga.getStatus();
+        this.exclusaoLogica = vaga.isExclusaoLogica();
+
     }
 }
