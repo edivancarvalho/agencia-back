@@ -9,6 +9,8 @@ import com.agencia.domain.dto.VagaDTO;
 import com.agencia.repository.CandidaturaRepository;
 import com.agencia.repository.UsuarioRepository;
 import com.agencia.repository.VagaRepository;
+import com.agencia.services.exceptions.UsuarioNaoEncontradoException;
+import com.agencia.services.exceptions.VagaNaoEncontradaException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,13 +40,23 @@ public class CandidaturaService {
 
     @Transactional
     public Candidatura create(CandidaturaDTO candidaturaDTO) {
+        // Verificar se o usuárioId está preenchido
+        if (candidaturaDTO.getUsuarioId() == null) {
+            throw new IllegalArgumentException("ID do usuário não pode ser nulo");
+        }
+
         // Buscar o usuário pelo ID
         Usuario usuario = usuarioRepository.findById(candidaturaDTO.getUsuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + candidaturaDTO.getUsuarioId()));
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(candidaturaDTO.getUsuarioId()));
+
+        // Verificar se a vaga está preenchida no DTO
+        if (candidaturaDTO.getVaga() == null || candidaturaDTO.getVaga().getId() == null) {
+            throw new IllegalArgumentException("ID da vaga não pode ser nulo");
+        }
 
         // Buscar a vaga pelo ID
         Vaga vaga = vagaRepository.findById(candidaturaDTO.getVaga().getId())
-                .orElseThrow(() -> new RuntimeException("Vaga não encontrada com o ID: " + candidaturaDTO.getVaga().getId()));
+                .orElseThrow(() -> new VagaNaoEncontradaException(candidaturaDTO.getVaga().getId()));
 
         // Criar a entidade Candidatura
         Candidatura candidatura = new Candidatura();

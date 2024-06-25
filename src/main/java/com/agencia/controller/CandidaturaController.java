@@ -3,6 +3,7 @@ package com.agencia.controller;
 import com.agencia.domain.Candidatura;
 import com.agencia.domain.dto.CandidaturaDTO;
 import com.agencia.services.CandidaturaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ public class CandidaturaController {
         return ResponseEntity.ok(candidaturas);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<CandidaturaDTO> create(@RequestBody CandidaturaDTO candidaturaDTO) {
+    @PostMapping
+    public ResponseEntity<CandidaturaDTO> create(@Valid @RequestBody CandidaturaDTO candidaturaDTO) {
         Candidatura candidatura = candidaturaService.create(candidaturaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new CandidaturaDTO(candidatura));
     }
