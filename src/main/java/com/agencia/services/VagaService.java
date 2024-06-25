@@ -4,7 +4,6 @@ import com.agencia.domain.Vaga;
 import com.agencia.domain.dto.VagaDTO;
 import com.agencia.domain.enums.Status;
 import com.agencia.repository.VagaRepository;
-import com.agencia.services.exceptions.ObjectnotFoundException;
 import com.agencia.services.exceptions.VagaNaoEncontradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class VagaService {
     @Autowired
     private VagaRepository vagaRepository;
 
-    public Vaga findById(Long id){
+    public Vaga findById(Long id) {
         Optional<Vaga> obj = vagaRepository.findById(id);
         return obj.orElseThrow(() -> new VagaNaoEncontradaException(id));
     }
@@ -59,7 +58,7 @@ public class VagaService {
 
     public Vaga update(Long id, VagaDTO objDTO){
         Vaga existeVaga = vagaRepository.findById(id)
-                .orElseThrow(() -> new ObjectnotFoundException("Vaga não ecnotrado! ID: " + id));
+                .orElseThrow(() -> new VagaNaoEncontradaException(id));
 
         existeVaga.setTitulo(objDTO.getTitulo());
         existeVaga.setDescricao(objDTO.getDescricao());

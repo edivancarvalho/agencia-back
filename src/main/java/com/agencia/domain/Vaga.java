@@ -42,6 +42,17 @@ public class Vaga {
         return getDataFim() == null || getDataFim().compareTo(new Date()) > 0;
     }
 
+    @PrePersist
+    protected void prePersist() {
+        this.dataCriacao = LocalDateTime.now();
+        this.dataAtualizacao = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void preUpdate() {
+        this.dataAtualizacao = LocalDateTime.now();
+    }
+
 //    @ManyToOne
 //    @JoinColumn(name = "administrador_id")
 //    private Usuario administrador;
