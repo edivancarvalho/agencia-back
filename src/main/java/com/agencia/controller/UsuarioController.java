@@ -6,6 +6,7 @@ import com.agencia.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -21,6 +22,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping
+    @PreAuthorize("hasRole('o_usuarios')")
     public ResponseEntity<List<UsuarioDTO>> findAll() {
         List<Usuario> list = usuarioService.findAll();
         List<UsuarioDTO> listDTO = list.stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
@@ -28,11 +30,13 @@ public class UsuarioController {
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize("hasRole('o_usuarios')")
     public ResponseEntity<UsuarioDTO> findById(@PathVariable Long id) {
         Usuario obj = usuarioService.findById(id);
         return ResponseEntity.ok().body(new UsuarioDTO(obj));
     }
 
+    // Endpoint para criar usuário autenticado
     @PostMapping("/")
     public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioDTO objDTO) {
         Usuario newObj = usuarioService.create(objDTO);
@@ -40,16 +44,25 @@ public class UsuarioController {
         return ResponseEntity.created(uri).build();
     }
 
+    @PreAuthorize("hasRole('o_usuarios')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<UsuarioDTO> update(@PathVariable Long id, @Valid @RequestBody UsuarioDTO objDTO) {
         Usuario obj = usuarioService.update(id, objDTO);
         return ResponseEntity.ok().body(new UsuarioDTO(obj));
     }
 
+    @PreAuthorize("hasRole('o_usuarios')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<UsuarioDTO> delete(@PathVariable Long id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+    // Novo endpoint para criar usuário sem autenticação
+    @PostMapping("/public")
+    public ResponseEntity<UsuarioDTO> createPublic(@Valid @RequestBody UsuarioDTO objDTO) {
+        Usuario newObj = usuarioService.create(objDTO);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
+        return ResponseEntity.created(uri).build();
+    }
 }
