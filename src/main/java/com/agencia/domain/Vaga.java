@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,6 +42,9 @@ public class Vaga {
     public boolean isAtivo() {
         return getDataFim() == null || getDataFim().compareTo(new Date()) > 0;
     }
+
+    @OneToMany(mappedBy = "vaga")
+    private Set<Candidatura> candidaturas;
 
     @PrePersist
     protected void prePersist() {

@@ -19,17 +19,20 @@ import java.util.Date;
 @Builder
 public class UsuarioDTO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    @Column(unique = true)
     private String email;
-    private LocalDateTime dataCadastro;
-    private LocalDateTime ultimaAtualizazao;
+
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    protected Date dataFim;
-    protected boolean exclusaoLogica = false;
+    private LocalDateTime dataCadastro;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime ultimaAtualizazao;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private Date dataFim;
+
+    private boolean exclusaoLogica = false;
 
     public UsuarioDTO(Usuario usuario){
         this.id = usuario.getId();

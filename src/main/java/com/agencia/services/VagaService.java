@@ -20,12 +20,12 @@ public class VagaService {
     private VagaRepository vagaRepository;
 
     public Vaga findById(Long id) {
-        Optional<Vaga> obj = vagaRepository.findById(id);
+        Optional<Vaga> obj = vagaRepository.findByIdAndExclusaoLogicaFalse(id);
         return obj.orElseThrow(() -> new VagaNaoEncontradaException(id));
     }
 
     public List<Vaga> findAll() {
-        return vagaRepository.findAll();
+        return vagaRepository.findByExclusaoLogicaFalse();
     }
 
     public Vaga create(VagaDTO obj) {

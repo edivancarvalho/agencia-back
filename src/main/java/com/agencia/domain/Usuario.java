@@ -8,6 +8,7 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -41,6 +42,9 @@ public class Usuario {
     public boolean isAtivo() {
         return getDataFim() == null || getDataFim().compareTo(new Date()) > 0;
     }
+
+    @OneToMany(mappedBy = "usuario")
+    private Set<Candidatura> candidaturas;
 
     @PrePersist
     protected void prePersist() {
