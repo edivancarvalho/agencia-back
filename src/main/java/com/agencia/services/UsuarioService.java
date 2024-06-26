@@ -19,11 +19,11 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public Usuario findById(Long id){
-        Optional<Usuario> obj = usuarioRepository.findById(id);
+        Optional<Usuario> obj = usuarioRepository.findByIdAndExclusaoLogicaFalse(id);
         return obj.orElseThrow(() -> new UsuarioNaoEncontradoException(id));
     }
     public List<Usuario> findAll(){
-        return usuarioRepository.findAll();
+        return usuarioRepository.findByExclusaoLogicaFalse();
     }
 
     public Usuario create(UsuarioDTO obj) {
